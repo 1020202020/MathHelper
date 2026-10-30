@@ -1,29 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Advanced Graphs</title>
-    <style>
-        body { font-family: Arial; background: #111; color: white; text-align: center; }
-        .game { margin: 20px; padding: 10px; background: #222; border-radius: 10px; }
-        a { color: #00f0ff; text-decoration: none; }
-        button { margin-top: 20px; padding: 10px 20px; border: none; background: #00f0ff; color: #000; border-radius: 5px; cursor: pointer; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Advanced Graphs</title>
+  <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-    <h1>📊 Advanced Graphs</h1>
-    <div class="game">
-        <h2>Drift Hunters</h2>
-        <a href="https://drifthunters.com/" target="_blank">Play Fullscreen</a>
+  <header class="topbar">
+    <div class="brand">📊 Advanced Graphs</div>
+    <nav class="tabs">
+      <button class="tab active" data-view="games">🎮 Games</button>
+      <button class="tab" data-view="search">🔎 Search</button>
+      <button class="tab" data-view="ai">🤖 AI</button>
+    </nav>
+    <a class="back" href="index.html">← Math Tools</a>
+  </header>
+
+  <!-- GAMES -->
+  <main id="view-games" class="view active">
+    <div class="toolbar">
+      <input id="gameFilter" type="search" placeholder="Search games…" autocomplete="off">
+      <button id="addGameBtn" class="btn ghost">+ Add game</button>
     </div>
-    <div class="game">
-        <h2>Paper.io</h2>
-        <a href="https://paper-io.com/" target="_blank">Play Fullscreen</a>
+    <div id="chips" class="chips"></div>
+    <section id="recentWrap" hidden>
+      <h2>Recently played</h2>
+      <div id="recentGrid" class="grid"></div>
+    </section>
+    <h2 id="allTitle">All games</h2>
+    <div id="gameGrid" class="grid"></div>
+    <p id="noGames" class="muted" hidden>No games match that search.</p>
+  </main>
+
+  <!-- SEARCH -->
+  <main id="view-search" class="view">
+    <form id="searchForm" class="browserbar">
+      <button type="button" id="sHome" class="btn ghost" title="Home">🏠</button>
+      <input id="searchInput" type="text" placeholder="Search Google or type a URL" autocomplete="off">
+      <button class="btn" type="submit">Go</button>
+    </form>
+    <div class="frameWrap">
+      <iframe id="searchFrame" title="Search" referrerpolicy="no-referrer"
+        sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
     </div>
-    <div class="game">
-        <h2>Snake Game</h2>
-        <iframe src="snake.html" width="400" height="400" style="border:none;"></iframe>
+    <p class="muted small">Some sites refuse to load inside another page. If a page stays blank,
+      <a id="sNewTab" href="#" target="_blank" rel="noopener">open it in a new tab</a>.</p>
+  </main>
+
+  <!-- AI -->
+  <main id="view-ai" class="view">
+    <div id="chatLog" class="chatlog">
+      <div class="msg bot"><div class="bubble">Hi! Ask me anything — homework help, facts, game tips, code, whatever. 🤖</div></div>
     </div>
-    <button onclick="window.location.href='index.html'">🔙 Back to Math Tools</button>
+    <form id="chatForm" class="chatbar">
+      <textarea id="chatInput" rows="1" placeholder="Ask anything… (Enter to send, Shift+Enter for new line)"></textarea>
+      <button class="btn" type="submit" id="chatSend">Send</button>
+      <button class="btn ghost" type="button" id="chatClear" title="New chat">🗑️</button>
+    </form>
+    <p class="muted small">AI is powered by Puter.js (free). The first time, it may ask you to sign in or create a free Puter account.</p>
+  </main>
+
+  <!-- GAME PLAYER -->
+  <div id="player" class="player" hidden>
+    <div class="playerbar">
+      <button id="pClose" class="btn ghost">← Back</button>
+      <span id="pTitle"></span>
+      <div class="spacer"></div>
+      <button id="pReload" class="btn ghost" title="Reload">⟳</button>
+      <button id="pFav" class="btn ghost" title="Favorite">☆</button>
+      <a id="pNewTab" class="btn ghost" target="_blank" rel="noopener" title="Use this if the game won't load">↗ New tab</a>
+      <button id="pFull" class="btn">⛶ Fullscreen</button>
+    </div>
+    <iframe id="pFrame" title="Game" allow="fullscreen; autoplay; gamepad; pointer-lock; clipboard-write" allowfullscreen></iframe>
+  </div>
+
+  <!-- ADD GAME DIALOG -->
+  <dialog id="addDialog">
+    <form method="dialog" id="addForm">
+      <h3>Add your own game</h3>
+      <label>Name <input name="name" required></label>
+      <label>Game URL <input name="url" type="url" required placeholder="https://…"></label>
+      <label>Emoji <input name="emoji" maxlength="4" placeholder="🎮"></label>
+      <div class="row">
+        <button class="btn ghost" value="cancel" formnovalidate>Cancel</button>
+        <button class="btn" value="ok">Add</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="https://js.puter.com/v2/"></script>
+  <script src="assets/games-data.js"></script>
+  <script src="assets/app.js"></script>
 </body>
 </html>

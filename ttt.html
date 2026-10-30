@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Tic Tac Toe</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: #0d0f1a; color: #e8eaf6; font-family: system-ui, Arial, sans-serif; }
+    body { display: grid; place-items: center; }
+    .wrap { text-align: center; }
+    .board { display: grid; grid-template-columns: repeat(3, 100px); gap: 8px; margin: 16px auto; }
+    .cell { width: 100px; height: 100px; font-size: 3rem; font-weight: 800; border: 0; border-radius: 12px; background: #20243a; color: #fff; cursor: pointer; }
+    .cell.X { color: #00e0ff; } .cell.O { color: #ff5c8a; }
+    .cell.win { background: #2f6b3a; }
+    button.ctl { padding: 8px 14px; border: 0; border-radius: 8px; background: #00e0ff; font-weight: 700; cursor: pointer; margin: 0 4px; }
+    select { padding: 7px; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h2 id="status">Your turn (X)</h2>
+    <div class="board" id="board"></div>
+    <select id="mode">
+      <option value="cpu">vs Computer</option>
+      <option value="2p">2 Players</option>
+    </select>
+    <button class="ctl" id="restart">Restart</button>
+    <p id="score">You 0 · Draw 0 · O 0</p>
+  </div>
+  <script>
+    const LINES = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+    const boardEl = document.getElementById("board"), statusEl = document.getElementById("status");
+    const modeEl = document.getElementById("mode");
+    let board, turn, done, tally = { X: 0, D: 0, O: 0 };
+
+    function winner(b) {
+      for (const l of LINES) if (b[l[0]] && b[l[0]] === b[l[1]] && b[l[0]] === b[l[2]]) return { p: b[l[0]], line: l };
+      return b.every(Boolean) ? { p: "D" } : null;
+    }
+    function minimax(b, player) {
+      const w = winner(b);
+      if (w) return { s: w.p === "O" ? 1 : w.p === "X" ? -1 : 0 };
+      let best = { s: player === "O" ? -2 : 2 };
+      b.forEach((v, i) => {
+        if (v) return;
+        b[i] = player;
+        const s = minimax(b, player === "O" ? "X" : "O").s;
+        b[i] = null;
+        if (player === "O" ? s > best.s : s < best.s) best = { s, i };
+      });
+      return best;
+    }
+    function play(i) {
+      if (done || board[i]) return;
+      board[i] = turn;
+      turn = turn === "X" ? "O" : "X";
+      render();
+      if (!done && modeEl.value === "cpu" && turn === "O") setTimeout(() => {
+        // Small chance of a random move so the computer can be beaten.
+        const free = board.map((v, k) => v ? null : k).filter(k => k !== null);
+        play(Math.random() < 0.2 ? free[Math.floor(Math.random() * free.length)] : minimax(board, "O").i);
+      }, 300);
+    }
+    function render() {
+      const w = winner(board);
+      boardEl.innerHTML = "";
+      board.forEach((v, i) => {
+        const b = document.createElement("button");
+        b.className = "cell " + (v || "") + (w?.line?.includes(i) ? " win" : "");
+        b.textContent = v || "";
+        b.onclick = () => { if (modeEl.value === "2p" || turn === "X") play(i); };
+        boardEl.appendChild(b);
+      });
+      if (w && !done) { done = true; tally[w.p]++; }
+      statusEl.textContent = w ? (w.p === "D" ? "Draw!" : `${w.p} wins!`) : `${turn}'s turn`;
+      document.getElementById("score").textContent = `X ${tally.X} · Draw ${tally.D} · O ${tally.O}`;
+    }
+    function reset() { board = Array(9).fill(null); turn = "X"; done = false; render(); }
+    document.getElementById("restart").onclick = reset;
+    modeEl.onchange = reset;
+    reset();
+  </script>
+</body>
+</html>
