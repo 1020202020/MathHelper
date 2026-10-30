@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>J.A.R.V.I.S.</title>
+  <link rel="stylesheet" href="assets/jarvis.css">
+</head>
+<body>
+  <header class="hud-top">
+    <div class="brand">J.A.R.V.I.S.</div>
+    <div id="status" class="status">Offline</div>
+    <div class="spacer"></div>
+    <button id="gmailBtn" class="hbtn" title="Connect Gmail">✉ Connect Gmail</button>
+    <button id="settingsBtn" class="hbtn" title="Settings">⚙</button>
+    <a class="hbtn" href="index.html">← Home</a>
+  </header>
+
+  <main class="stage">
+    <button id="reactor" class="reactor" title="Click to talk (or say “Jarvis …” with wake word on)">
+      <span class="ring r1"></span><span class="ring r2"></span><span class="ring r3"></span>
+      <span class="core"></span>
+    </button>
+    <div id="caption" class="caption">Click the reactor or type below to speak to me.</div>
+
+    <div id="log" class="log"></div>
+
+    <form id="cmdForm" class="cmdbar">
+      <button type="button" id="micBtn" class="hbtn mic" title="Push to talk">🎙</button>
+      <input id="cmdInput" type="text" placeholder="Ask me anything, sir…" autocomplete="off">
+      <button class="hbtn primary" type="submit">Send</button>
+    </form>
+    <label class="wake"><input type="checkbox" id="wakeToggle"> Always listen for “Jarvis”</label>
+  </main>
+
+  <dialog id="settings">
+    <form method="dialog" id="settingsForm">
+      <h3>Settings</h3>
+      <label>What should I call you?
+        <input name="userName" placeholder="sir">
+      </label>
+      <label>Browser voice
+        <select name="voiceURI" id="voiceSelect"></select>
+      </label>
+      <button type="button" id="testVoice" class="hbtn">▶ Test voice</button>
+
+      <fieldset>
+        <legend>Premium voice (optional, ElevenLabs)</legend>
+        <p class="hint">Sounds much more like a real British AI butler. Get a free key at elevenlabs.io and pick a British male voice ID from their voice library.</p>
+        <label>API key <input name="elevenKey" type="password" autocomplete="off"></label>
+        <label>Voice ID <input name="elevenVoice" placeholder="e.g. a British male voice ID"></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Gmail (optional)</legend>
+        <p class="hint">Paste a Google OAuth Client ID. See <a href="JARVIS.md" target="_blank">JARVIS.md</a> for the 5-minute setup.</p>
+        <label>Google Client ID <input name="googleClientId" placeholder="xxxx.apps.googleusercontent.com"></label>
+      </fieldset>
+
+      <label>AI model (blank = default)
+        <input name="model" placeholder="e.g. gpt-5-nano, claude-sonnet-4-5">
+      </label>
+
+      <div class="row">
+        <button class="hbtn" value="cancel" formnovalidate>Cancel</button>
+        <button class="hbtn primary" value="ok">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="confirmSend">
+    <form method="dialog">
+      <h3>Send this email?</h3>
+      <div id="confirmBody" class="confirm-body"></div>
+      <div class="row">
+        <button class="hbtn" value="no">Cancel</button>
+        <button class="hbtn primary" value="yes">Send</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="https://js.puter.com/v2/"></script>
+  <script src="https://accounts.google.com/gsi/client" async></script>
+  <script src="assets/jarvis.js"></script>
+</body>
+</html>
