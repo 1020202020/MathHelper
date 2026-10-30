@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Advanced Graphs</title>
   <link rel="stylesheet" href="assets/style.css">
+  <script>try { document.documentElement.dataset.theme = JSON.parse(localStorage.getItem("theme")) || "dark"; } catch {}</script>
 </head>
 <body>
   <header class="topbar">
@@ -14,6 +15,13 @@
       <button class="tab" data-view="search">🔎 Search</button>
       <button class="tab" data-view="ai">🤖 AI</button>
     </nav>
+    <select id="themeSelect" title="Theme">
+      <option value="dark">🌙 Dark</option>
+      <option value="light">☀️ Light</option>
+      <option value="midnight">🔮 Midnight</option>
+      <option value="ocean">🌊 Ocean</option>
+      <option value="hacker">💚 Hacker</option>
+    </select>
     <a class="back" href="index.html">← Math Tools</a>
   </header>
 
@@ -21,6 +29,7 @@
   <main id="view-games" class="view active">
     <div class="toolbar">
       <input id="gameFilter" type="search" placeholder="Search games…" autocomplete="off">
+      <button id="randomBtn" class="btn" title="Play a random game">🎲 Random</button>
       <button id="addGameBtn" class="btn ghost">+ Add game</button>
     </div>
     <div id="chips" class="chips"></div>

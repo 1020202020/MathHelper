@@ -76,12 +76,17 @@
     }
   }
 
-  function renderGames() {
-    renderChips();
+  function filteredGames() {
     const q = $("#gameFilter").value.trim().toLowerCase();
-    const list = allGames().filter(g =>
+    return allGames().filter(g =>
       (activeCat === "All" || g.cat === activeCat || (activeCat === "★ Favorites" && favorites.has(g.name))) &&
       (!q || g.name.toLowerCase().includes(q) || g.cat.toLowerCase().includes(q)));
+  }
+
+  function renderGames() {
+    renderChips();
+    const q = $("#gameFilter").value.trim();
+    const list = filteredGames();
     const grid = $("#gameGrid");
     grid.replaceChildren(...list.map(card));
     $("#noGames").hidden = list.length > 0;
@@ -124,6 +129,22 @@
     $("#pFav").textContent = favorites.has(current.name) ? "★" : "☆";
   });
   $("#gameFilter").addEventListener("input", renderGames);
+
+  // Picks from the games currently shown (respects search/category), or everything if none match.
+  $("#randomBtn").addEventListener("click", () => {
+    let pool = filteredGames();
+    if (!pool.length) pool = allGames();
+    if (pool.length > 1) pool = pool.filter(g => g.name !== recent[0]);
+    openGame(pool[Math.floor(Math.random() * pool.length)]);
+  });
+
+  /* ---------------- Theme ---------------- */
+  const themeSelect = $("#themeSelect");
+  themeSelect.value = document.documentElement.dataset.theme || "dark";
+  themeSelect.addEventListener("change", () => {
+    document.documentElement.dataset.theme = themeSelect.value;
+    store.set("theme", themeSelect.value);
+  });
 
   $("#addGameBtn").addEventListener("click", () => { $("#addForm").reset(); $("#addDialog").showModal(); });
   $("#addDialog").addEventListener("close", () => {

@@ -6,7 +6,29 @@
   --muted: #8d93b5;
   --accent: #00e0ff;
   --accent2: #8a5cff;
+  --border: var(--border);
+  --user-bubble: linear-gradient(135deg, var(--accent2), #5a3ad6);
   --radius: 14px;
+  color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --bg: #f3f5fb; --panel: #ffffff; --panel2: #e8ebf5; --text: #1b1e2e; --muted: #5d6385;
+  --accent: #0077ff; --accent2: #7a4dff; --border: #0000001a;
+  --user-bubble: linear-gradient(135deg, #0077ff, #4f5bff);
+  color-scheme: light;
+}
+:root[data-theme="light"] .tab.active, :root[data-theme="light"] .btn:not(.ghost) { color: #fff; }
+:root[data-theme="midnight"] {
+  --bg: #120a24; --panel: #1d1238; --panel2: #2a1c4f; --text: #efe8ff; --muted: #a596cc;
+  --accent: #c77dff; --accent2: #ff5cb8;
+}
+:root[data-theme="ocean"] {
+  --bg: #061a24; --panel: #0b2633; --panel2: #123747; --text: #e3f6ff; --muted: #84a9ba;
+  --accent: #2ee6c5; --accent2: #1c8cff;
+}
+:root[data-theme="hacker"] {
+  --bg: #000; --panel: #0a120a; --panel2: #102010; --text: #b6ffb6; --muted: #4fae4f;
+  --accent: #39ff14; --accent2: #0f7a0f;
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; }
@@ -25,7 +47,7 @@ h2 { font-size: 1.05rem; margin: 22px 0 10px; color: var(--muted); font-weight: 
 .topbar {
   display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
   padding: 10px 18px; background: var(--panel);
-  border-bottom: 1px solid #ffffff12; position: sticky; top: 0; z-index: 5;
+  border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 5;
 }
 .brand { font-weight: 800; font-size: 1.15rem; }
 .tabs { display: flex; gap: 6px; flex: 1; }
@@ -36,6 +58,8 @@ h2 { font-size: 1.05rem; margin: 22px 0 10px; color: var(--muted); font-weight: 
 .tab:hover { color: var(--text); background: var(--panel2); }
 .tab.active { color: #000; background: var(--accent); }
 .back { text-decoration: none; font-size: .9rem; }
+#themeSelect { padding: 6px 8px; font-size: .88rem; cursor: pointer; }
+body, .topbar, .card, .bubble, input, textarea, select { transition: background-color .2s, color .2s; }
 
 .view { display: none; flex: 1; padding: 18px; max-width: 1400px; width: 100%; margin: 0 auto; min-height: 0; }
 .view.active { display: flex; flex-direction: column; }
@@ -48,11 +72,11 @@ h2 { font-size: 1.05rem; margin: 22px 0 10px; color: var(--muted); font-weight: 
 }
 .btn:hover { filter: brightness(1.1); }
 .btn.ghost { background: var(--panel2); color: var(--text); }
-input, textarea {
-  background: var(--panel2); color: var(--text); border: 1px solid #ffffff18;
+input, textarea, select {
+  background: var(--panel2); color: var(--text); border: 1px solid var(--border);
   border-radius: 10px; padding: 10px 12px; font: inherit; outline: none;
 }
-input:focus, textarea:focus { border-color: var(--accent); }
+input:focus, textarea:focus, select:focus { border-color: var(--accent); }
 
 .toolbar { display: flex; gap: 10px; }
 .toolbar input { flex: 1; font-size: 1rem; }
@@ -66,7 +90,7 @@ input:focus, textarea:focus { border-color: var(--accent); }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
 .card {
   position: relative; border-radius: var(--radius); overflow: hidden; cursor: pointer;
-  background: var(--panel); border: 1px solid #ffffff10; text-align: left; padding: 0;
+  background: var(--panel); border: 1px solid var(--border); text-align: left; padding: 0;
   color: var(--text); font: inherit; transition: transform .12s, box-shadow .12s;
 }
 .card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px #0008; border-color: var(--accent); }
@@ -111,7 +135,7 @@ input:focus, textarea:focus { border-color: var(--accent); }
   max-width: min(780px, 88%); padding: 11px 15px; border-radius: 16px; line-height: 1.5;
   background: var(--panel2); overflow-wrap: anywhere;
 }
-.msg.user .bubble { background: linear-gradient(135deg, var(--accent2), #5a3ad6); }
+.msg.user .bubble { background: var(--user-bubble); color: #fff; }
 .bubble pre { background: #0008; padding: 10px; border-radius: 8px; overflow-x: auto; }
 .bubble code { font-family: ui-monospace, Consolas, monospace; font-size: .88em; }
 .bubble p { margin: 0 0 8px; } .bubble p:last-child { margin: 0; }
@@ -122,7 +146,7 @@ input:focus, textarea:focus { border-color: var(--accent); }
 .chatbar textarea { flex: 1; resize: none; max-height: 180px; font-size: 1rem; }
 
 dialog {
-  background: var(--panel); color: var(--text); border: 1px solid #ffffff20;
+  background: var(--panel); color: var(--text); border: 1px solid var(--border);
   border-radius: var(--radius); padding: 20px; width: min(420px, 92vw);
 }
 dialog::backdrop { background: #000a; }
